@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
 
-const RandomValue = (min, max)  => {
-  return (Math.floor(Math.random() * (max - min + 1)) +min)
+const RandomValue = (min, max) => {
+  return (Math.floor(Math.random() * (max - min + 1)) + min)
 }
 
 const Button = (props) => (
@@ -17,19 +17,21 @@ const App = (props) => {
 
   const setSelectedValue = (newValue) => {
     setSelected(newValue)
-    console.log(newValue)
+    //console.log(newValue)
   }
 
   return (
     <div>
-      {props.anecdotes[selected]}
+      <h2>
+        {props.anecdotes[selected]}
+      </h2>
 
       <div>
-        <Button handleClick={() => setSelectedValue(RandomValue(0,5))} text='Next Anecdote'></Button>
+        <Button handleClick={() => setSelectedValue(RandomValue(0, 5))} text='Next Anecdote'></Button>
       </div>
-      
+
     </div>
-    
+
   )
 }
 
