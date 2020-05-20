@@ -12,7 +12,7 @@ const Course = ({ course }) => {
 
 const Sum = (props) => {
     const total = props.parts.reduce((prev, next) =>
-        prev + next.exercises, 0
+        console.log('what is happening', prev, next) || prev + next.exercises, 0
     )
 
     return (total)
