@@ -39,7 +39,7 @@ const App = (props) => {
       </div>
 
       <h1>Anecdote with most votes</h1>
-        {getMostVoted()}
+      {getMostVoted()}
 
 
     </div>
