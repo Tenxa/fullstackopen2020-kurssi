@@ -1,5 +1,4 @@
 import React from 'react'
-import Part from './Part'
 
 const Course = ({ course }) => {
     //console.log('From course', course)
@@ -11,7 +10,7 @@ const Course = ({ course }) => {
                 return (
                     <div>
                         <li key={c.id}>
-                            <Part name={c.name} exercise={c.exercises}/>
+                            {c.name} {c.exercises}
                         </li>
                     </div>
                 )
