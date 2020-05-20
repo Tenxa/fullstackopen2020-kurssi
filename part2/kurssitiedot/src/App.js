@@ -48,16 +48,14 @@ const App = () => {
         }
     ]
 
-    const listCourses = () => course.map(c =>
-        <ul key={c.id}>
-            <Course course={c} />
-        </ul>
-    )
-
     return (
         <div>
             <h1>{course.name}</h1>
-            {listCourses()}
+            {course.map((c) =>
+                <ul key={c.id}>
+                    <Course course={c}/>
+                </ul>
+            )}
         </div>
     )
 }
