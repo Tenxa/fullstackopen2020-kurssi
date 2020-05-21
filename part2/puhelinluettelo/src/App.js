@@ -64,7 +64,7 @@ const App = () => {
     ? persons
     : persons.filter(person => person.name.toLowerCase().indexOf(newFilter.toLowerCase()) === 0)
 
-  //console.log(persons)
+    
   return (
     <div>
       <h2>Phonebook</h2>
