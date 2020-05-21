@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import Filter from './components/Filter'
+
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -34,7 +36,7 @@ const App = () => {
 
       setPersons(persons.concat(personObj))
       setNewName('')
-      console.log(boolFlag)
+      
     }
 
   }
@@ -48,7 +50,7 @@ const App = () => {
       setShowAll(true)
     }
 
-    console.log(event.target.value)
+    console.log(newFilter)
   }
 
   const handleNameChange = (event) => {
@@ -64,13 +66,14 @@ const App = () => {
     ? persons
     : persons.filter(person => person.name.toLowerCase().indexOf(newFilter.toLowerCase()) === 0)
 
-    
+
   return (
     <div>
       <h2>Phonebook</h2>
-      <form>
-        <div>Filter shown with<input value={newFilter} onChange={handleFilterChange} /></div>
-      </form>
+
+      
+
+      <Filter filterText={newFilter} handleChangeFilterText={handleFilterChange}/>
 
       <h2>Add a new</h2>
       <form onSubmit={addPerson}>
