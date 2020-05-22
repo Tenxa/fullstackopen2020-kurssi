@@ -43,7 +43,7 @@ const App = () => {
 
   }
 
-  //onChange handlers
+  //Handlers
   const handleFilterChange = (event) => {
     setFilter(event.target.value)
     if (event.target.value !== '') {
@@ -69,7 +69,7 @@ const App = () => {
 
   return (
     <div>
-      
+
       <h2>Phonebook</h2>
       <Filter filterText={newFilter} handleChangeFilterText={handleFilterChange} />
 
