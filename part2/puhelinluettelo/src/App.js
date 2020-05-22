@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
+import Persons from './components/Persons'
 
 
 const App = () => {
@@ -16,7 +17,7 @@ const App = () => {
   const [newFilter, setFilter] = useState('')
   const [showAll, setShowAll] = useState(true)
 
-  
+
   const addPerson = (event) => {
     event.preventDefault()
 
@@ -37,7 +38,7 @@ const App = () => {
 
       setPersons(persons.concat(personObj))
       setNewName('')
-      
+
     }
 
   }
@@ -68,18 +69,15 @@ const App = () => {
 
   return (
     <div>
+      
       <h2>Phonebook</h2>
-      <Filter filterText={newFilter} handleChangeFilterText={handleFilterChange}/>
+      <Filter filterText={newFilter} handleChangeFilterText={handleFilterChange} />
 
       <h2>Add a new</h2>
-      <PersonForm handleAddPerson={addPerson} nameText={newName} numberText={newNumber} handleChangeNameText={handleNameChange} handleNumberChangeText={handleNumberChange}/>
+      <PersonForm handleAddPerson={addPerson} nameText={newName} numberText={newNumber} handleChangeNameText={handleNameChange} handleNumberChangeText={handleNumberChange} />
 
       <h2>Numbers</h2>
-
-      <div>{personsToShow.map((person) =>
-        <div key={person.id}>{person.name} {person.number}</div>
-      )}
-      </div>
+      <Persons personsToMap={personsToShow} />
 
     </div>
   )
