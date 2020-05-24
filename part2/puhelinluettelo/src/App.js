@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
-import Persons from './components/Persons'
-import axios from 'axios'
+import PersonsMap from './components/PersonsMap'
+import personService from './services/persons'
 
 
 const App = () => {
@@ -12,16 +12,13 @@ const App = () => {
   const [newFilter, setFilter] = useState('')
   const [showAll, setShowAll] = useState(true)
 
-  const hook = () => {
-    console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
+  useEffect(() => {
+    personService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
       })
-  }
-  useEffect(hook, [])
+  }, [])
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -41,9 +38,13 @@ const App = () => {
         id: persons.length + 1
       }
 
-      setPersons(persons.concat(personObj))
-      setNewName('')
-      setNewNumber('')
+      personService
+        .create(personObj)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+          setNewName('')
+          setNewNumber('')
+        })
 
     }
 
@@ -83,7 +84,7 @@ const App = () => {
       <PersonForm handleAddPerson={addPerson} nameText={newName} numberText={newNumber} handleChangeNameText={handleNameChange} handleNumberChangeText={handleNumberChange} />
 
       <h2>Numbers</h2>
-      <Persons personsToMap={personsToShow} />
+      <PersonsMap personsToMap={personsToShow} />
 
     </div>
   )

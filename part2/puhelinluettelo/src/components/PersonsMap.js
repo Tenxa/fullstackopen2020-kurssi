@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Persons = ({personsToMap}) => {
+const PersonsMap = ({personsToMap}) => {
     return(
         <div>
             {personsToMap.map((person) => 
@@ -12,4 +12,4 @@ const Persons = ({personsToMap}) => {
     )
 }
 
-export default Persons
+export default PersonsMap
