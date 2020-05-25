@@ -18,7 +18,10 @@ const App = () => {
       .then(initialPersons => {
         setPersons(initialPersons)
       })
-  }, [])
+  }, [persons])
+
+
+
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -48,6 +51,19 @@ const App = () => {
 
     }
 
+  }
+
+
+  const deletePerson = (person) => {
+    console.log(person)
+    if (window.confirm(`Delete ${person.name} ?`)) {
+      personService
+        .deleID(person.id, person)
+        .then(response => {
+          console.log(response)
+          
+        })
+    }
   }
 
   //Handlers
@@ -84,7 +100,7 @@ const App = () => {
       <PersonForm handleAddPerson={addPerson} nameText={newName} numberText={newNumber} handleChangeNameText={handleNameChange} handleNumberChangeText={handleNumberChange} />
 
       <h2>Numbers</h2>
-      <PersonsMap personsToMap={personsToShow} />
+      <PersonsMap personsToMap={personsToShow} deletePerson={deletePerson} />
 
     </div>
   )
