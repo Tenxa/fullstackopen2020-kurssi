@@ -55,14 +55,9 @@ const App = () => {
 
 
   const deletePerson = (person) => {
-    console.log(person)
     if (window.confirm(`Delete ${person.name} ?`)) {
       personService
         .deleID(person.id, person)
-        .then(response => {
-          console.log(response)
-          
-        })
     }
   }
 
