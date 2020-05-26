@@ -26,30 +26,41 @@ const App = () => {
     getAll()
   }, [])
 
-  
+
 
   const addPerson = (event) => {
     event.preventDefault()
 
     const personObj = {
-        name: newName,
-        number: newNumber,
-        id: persons.length + 1
-      }
+      name: newName,
+      number: newNumber,
+      id: persons.length + 1
+    }
 
     var boolFlag = false
     persons.forEach(person => {
       if (person.name === newName) {
         window.alert(`${newName} is already added to phonebook`)
-        if (person.number !== newNumber){
-          if(window.confirm(`Replace ${newName} number?`)){
+        if (person.number !== newNumber) {
+          if (window.confirm(`Replace ${newName} number?`)) {
             personObj.number = newNumber
           }
-          
+
           personService
             .update(person.id, personObj)
             .then(returnedPerson => {
+              console.log(returnedPerson)
               getAll()
+            })
+            .catch(error => {
+              setErrorMessage(
+                `Information of ${person.name} has already been removed from server`
+              )
+              getAll()
+              setTimeout(() => {
+                setErrorMessage('')
+                
+              }, 5000)
             })
         }
         boolFlag = true
@@ -57,7 +68,7 @@ const App = () => {
     })
 
     if (boolFlag === false) {
-      
+
 
       personService
         .create(personObj)
@@ -66,7 +77,7 @@ const App = () => {
           setErrorMessage(`Added ${personObj.name}`)
           setNewName('')
           setNewNumber('')
-          
+
         })
 
     }
