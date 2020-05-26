@@ -3,6 +3,7 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import PersonsMap from './components/PersonsMap'
 import personService from './services/persons'
+import Notification from './components/Notification'
 
 
 const App = () => {
@@ -11,42 +12,61 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setFilter] = useState('')
   const [showAll, setShowAll] = useState(true)
+  const [errorMessage, setErrorMessage] = useState('')
 
-  useEffect(() => {
+  const getAll = () => {
     personService
       .getAll()
       .then(initialPersons => {
         setPersons(initialPersons)
       })
-  }, [persons])
+  }
 
+  useEffect(() => {
+    getAll()
+  }, [])
 
-
+  
 
   const addPerson = (event) => {
     event.preventDefault()
 
-    var boolFlag = false
-    persons.forEach(person => {
-      if (person.name === newName) {
-        window.alert(`${newName} is already added to phonebook`)
-        boolFlag = true
-      }
-    })
-
-    if (boolFlag === false) {
-      const personObj = {
+    const personObj = {
         name: newName,
         number: newNumber,
         id: persons.length + 1
       }
 
+    var boolFlag = false
+    persons.forEach(person => {
+      if (person.name === newName) {
+        window.alert(`${newName} is already added to phonebook`)
+        if (person.number !== newNumber){
+          if(window.confirm(`Replace ${newName} number?`)){
+            personObj.number = newNumber
+          }
+          
+          personService
+            .update(person.id, personObj)
+            .then(returnedPerson => {
+              getAll()
+            })
+        }
+        boolFlag = true
+      }
+    })
+
+    if (boolFlag === false) {
+      
+
       personService
         .create(personObj)
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
+          setErrorMessage(`Added ${personObj.name}`)
           setNewName('')
           setNewNumber('')
+          
         })
 
     }
@@ -58,6 +78,10 @@ const App = () => {
     if (window.confirm(`Delete ${person.name} ?`)) {
       personService
         .deleID(person.id, person)
+        .then(response => {
+          getAll()
+          setErrorMessage(`Deleted ${person.name}`)
+        })
     }
   }
 
@@ -89,6 +113,7 @@ const App = () => {
     <div>
 
       <h2>Phonebook</h2>
+      <Notification message={errorMessage} />
       <Filter filterText={newFilter} handleChangeFilterText={handleFilterChange} />
 
       <h2>Add a new</h2>

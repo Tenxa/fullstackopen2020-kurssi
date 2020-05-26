@@ -1,18 +1,6 @@
 import React from 'react'
-import personService from '../services/persons'
 
-const deletePerson = (person) => {
-    console.log(person)
-    if (window.confirm(`Delete ${person.name} ?`)){
-      personService
-        .deleID(person.id, person)
-        .then(response => {
-          console.log(response)
-        })
-    }
-  }
-
-const PersonsMap = ({personsToMap}) => {
+const PersonsMap = ({personsToMap, deletePerson}) => {
     return(
         <div>
             {personsToMap.map((person) => 
