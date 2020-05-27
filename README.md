@@ -1,1 +1,1 @@
-# fullstackopen2020-kurssi
+# fullstackopen2020
