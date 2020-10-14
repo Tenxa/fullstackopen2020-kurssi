@@ -44,15 +44,16 @@ const App = () => {
         if (person.number !== newNumber) {
           if (window.confirm(`Replace ${newName} number?`)) {
             person.number = newNumber
+            const newPerson = {...person}
             personService
-              .update(person.id, person)
+              .update(person.id, newPerson)
               .then(returnedPerson => {
                 console.log(returnedPerson)
                 getAll()
               })
               .catch(error => {
                 console.log(error)
-                console.log(`PersonObj -> ${person}`)
+                console.log(`Person -> ${person}`)
                 setErrorMessage(
                   `Information of ${person.name} has already been removed from server`
                 )
