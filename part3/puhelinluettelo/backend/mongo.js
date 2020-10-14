@@ -15,7 +15,7 @@ mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, useFind
 const personSchema = new mongoose.Schema({
     name: String,
     number: String,
-    id: Number
+    //id: Number
 })
 
 const Person = mongoose.model('Person', personSchema)
@@ -23,7 +23,7 @@ const Person = mongoose.model('Person', personSchema)
 const person = new Person({
     name: process.argv[3],
     number: process.argv[4],
-    id: Number(Math.floor(Math.random() * Math.floor(1500))),
+    //id: Number(Math.floor(Math.random() * Math.floor(1500))),
 })
 
 if (process.argv.length == 3) {
