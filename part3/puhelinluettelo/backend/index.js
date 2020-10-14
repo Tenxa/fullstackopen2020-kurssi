@@ -72,7 +72,7 @@ app.post('/api/persons', (request, response) => {
     })
 })
 
-app.put('/api/persons', (request, response) => {
+app.put('/api/persons', (request, response, next) => {
     const body = request.body
 
     const person = {

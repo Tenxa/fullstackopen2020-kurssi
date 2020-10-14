@@ -31,10 +31,10 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault()
 
-    let personObj = {
+    const personObj = {
       name: newName,
       number: newNumber,
-      id: ""
+      //id: ""
     }
 
     var boolFlag = false
@@ -43,28 +43,27 @@ const App = () => {
         window.alert(`${newName} is alreadyy added to phonebook`)
         if (person.number !== newNumber) {
           if (window.confirm(`Replace ${newName} number?`)) {
-            personObj.number = newNumber
-            personObj.id = person.id
-            console.log(`Person: ${person} -- personObj: ${personObj}`)
+            person.number = newNumber
+            personService
+              .update(person.id, person)
+              .then(returnedPerson => {
+                console.log(returnedPerson)
+                getAll()
+              })
+              .catch(error => {
+                console.log(error)
+                console.log(`PersonObj -> ${person}`)
+                setErrorMessage(
+                  `Information of ${person.name} has already been removed from server`
+                )
+                getAll()
+                setTimeout(() => {
+                  setErrorMessage('')
+
+                }, 5000)
+              })
           }
-          personService
-            .update(person.id, personObj)
-            .then(returnedPerson => {
-              console.log(returnedPerson)
-              getAll()
-            })
-            .catch(error => {
-              console.log(error)
-              console.log(`PersonObj -> ${personObj}`)
-              setErrorMessage(
-                `Information of ${person.name} has already been removed from server`
-              )
-              getAll()
-              setTimeout(() => {
-                setErrorMessage('')
-                
-              }, 5000)
-            })
+
         }
         boolFlag = true
       }
