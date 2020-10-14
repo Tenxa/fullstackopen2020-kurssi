@@ -36,16 +36,16 @@ const App = () => {
       number: newNumber,
       //id: persons.length + 1
     }
+    console.log(event);
 
     var boolFlag = false
     persons.forEach(person => {
       if (person.name === newName) {
-        window.alert(`${newName} is already added to phonebook`)
+        window.alert(`${newName} is alreadyy added to phonebook`)
         if (person.number !== newNumber) {
           if (window.confirm(`Replace ${newName} number?`)) {
             personObj.number = newNumber
           }
-
           personService
             .update(person.id, personObj)
             .then(returnedPerson => {
