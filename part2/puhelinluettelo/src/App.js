@@ -31,12 +31,11 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault()
 
-    const personObj = {
+    let personObj = {
       name: newName,
       number: newNumber,
-      //id: persons.length + 1
+      id: ""
     }
-    console.log(event);
 
     var boolFlag = false
     persons.forEach(person => {
@@ -45,6 +44,7 @@ const App = () => {
         if (person.number !== newNumber) {
           if (window.confirm(`Replace ${newName} number?`)) {
             personObj.number = newNumber
+            personObj.id = person.id
           }
           personService
             .update(person.id, personObj)
@@ -53,6 +53,8 @@ const App = () => {
               getAll()
             })
             .catch(error => {
+              console.log(error)
+              console.log(`PersonObj -> ${personObj}`)
               setErrorMessage(
                 `Information of ${person.name} has already been removed from server`
               )
