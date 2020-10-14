@@ -45,6 +45,7 @@ const App = () => {
           if (window.confirm(`Replace ${newName} number?`)) {
             personObj.number = newNumber
             personObj.id = person.id
+            console.log(`Person: ${person} -- personObj: ${personObj}`)
           }
           personService
             .update(person.id, personObj)
