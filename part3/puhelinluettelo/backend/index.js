@@ -5,6 +5,7 @@ const { request, response } = require('express')
 const cors = require('cors')
 const app = express()
 const Person = require('./models/person')
+const { update } = require('./models/person')
 
 app.use(express.json())
 morgan.token('body', (req, res) => JSON.stringify(req.body));
@@ -69,6 +70,21 @@ app.post('/api/persons', (request, response) => {
     person.save().then(savedPerson => {
         response.json(savedPerson)
     })
+})
+
+app.put('/api/persons', (request, response) => {
+    const body = request.body
+
+    const person = {
+        name: body.name,
+        number: body.number
+    }
+
+    Person.findByIdAndUpdate(request.params.id, person, { new: true })
+        .then(updatedPerson => {
+            response.json(updatedPerson.toJSON())
+        })
+        .catch(error => next(error))
 })
 
 //Error handling

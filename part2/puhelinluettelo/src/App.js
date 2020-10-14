@@ -34,7 +34,7 @@ const App = () => {
     const personObj = {
       name: newName,
       number: newNumber,
-      id: persons.length + 1
+      //id: persons.length + 1
     }
 
     var boolFlag = false
