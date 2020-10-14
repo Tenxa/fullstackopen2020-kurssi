@@ -51,7 +51,7 @@ const App = () => {
                 console.log(returnedPerson)
                 getAll()
               })
-              .catch(error => {
+              /*.catch(error => {
                 console.log(error)
                 console.log(`Person -> ${person}`)
                 setErrorMessage(
@@ -62,7 +62,7 @@ const App = () => {
                   setErrorMessage('')
 
                 }, 5000)
-              })
+              })*/
           }
 
         }
