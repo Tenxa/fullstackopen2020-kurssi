@@ -50,7 +50,7 @@ const App = () => {
             console.log("New:", newPerson)
             console.log("New:", JSON.stringify(newPerson))
             personService
-              .update(person.id, newPerson)
+              .update(person.id, JSON.stringify(newPerson))
               .then(returnedPerson => {
                 console.log(returnedPerson)
                 getAll()
