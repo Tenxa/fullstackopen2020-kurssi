@@ -40,17 +40,12 @@ const App = () => {
     var boolFlag = false
     persons.forEach(person => {
       if (person.name === newName) {
-        console.log("eka logi", person)
-        console.log("eka logi 2", JSON.stringify(person))
         window.alert(`${newName} is alreadyy added to phonebook`)
         if (person.number !== newNumber) {
           if (window.confirm(`Replace ${newName} number?`)) {
             person.number = newNumber
-            const newPerson = {...person}
-            console.log("New:", newPerson)
-            console.log("New:", JSON.stringify(newPerson))
             personService
-              .update(person.id, newPerson)
+              .update(person.id, person)
               .then(returnedPerson => {
                 console.log(returnedPerson)
                 getAll()
