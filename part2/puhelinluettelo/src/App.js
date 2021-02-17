@@ -34,7 +34,6 @@ const App = () => {
     const personObj = {
       name: newName,
       number: newNumber,
-      //id: ""
     }
 
     var boolFlag = false
@@ -80,6 +79,9 @@ const App = () => {
           setNewName('')
           setNewNumber('')
 
+        })
+        .catch(error => {
+          setErrorMessage(error.response.data)
         })
 
     }
