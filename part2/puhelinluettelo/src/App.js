@@ -81,7 +81,7 @@ const App = () => {
 
         })
         .catch(error => {
-          setErrorMessage(error.response.data)
+          setErrorMessage(JSON.stringify(error.response.data))
         })
 
     }

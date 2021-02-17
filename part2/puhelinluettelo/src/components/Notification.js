@@ -29,7 +29,7 @@ const Notification = ({ message }) => {
     }
 
 
-    if (message.includes('Deleted') || message.includes('Information')) {
+    if (message.includes('Deleted') || message.includes('Information') || message.includes("failed")) {
         return (
             <div className="notification" style={notificationDelStyle}>
                 {message}
