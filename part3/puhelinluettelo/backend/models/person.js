@@ -36,4 +36,6 @@ personSchema.set('toJSON', {
     }
 })
 
+//ashtray
+
 module.exports = mongoose.model('Person', personSchema)
