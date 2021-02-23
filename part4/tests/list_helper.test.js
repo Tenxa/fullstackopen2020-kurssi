@@ -19,7 +19,7 @@ test('dummy returns one', () => {
   expect(result).toBe(1)
 })
 
-describe('\ntotal likes', () => {
+describe('\nTotal likes', () => {
   const listWithOneBlog = [
     {
       _id: '5a422aa71b54a676234d17f8',
@@ -42,9 +42,23 @@ describe('\ntotal likes', () => {
   })
 })
 
-describe('\nfavorite blog', () => {
+describe('\nFavorite blog', () => {
   test('find the most liked blog', () => {
     const result = listHelper.favoriteBlog(listWithMultipleBlogs)
     expect(result).toEqual({ title: 'Canonical string reduction', author: 'Edsger W. Dijkstra', likes: 12 })
+  })
+})
+
+describe('\nMost blogs', () => {
+  test('Find author with most blogs', () => {
+    const result = listHelper.mostBlogs(listWithMultipleBlogs)
+    expect(result).toEqual({ author: 'Robert C. Martin', blogs: 3 })
+  })
+})
+
+describe('\nMost liked', () => {
+  test('Find the author that has the most likes', () => {
+    const result = listHelper.mostLikes(listWithMultipleBlogs)
+    expect(result).toEqual({ author: 'Edsger W. Dijkstra', likes: 17 })
   })
 })
