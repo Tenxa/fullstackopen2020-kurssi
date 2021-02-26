@@ -24,26 +24,18 @@ describe('/api/blogs tests', () => {
       .expect('Content-Type', /application\/json/)
   })
 
+  //4.8: blogilistan testit, step 1
   test('there are two blogs', async () => {
     const response = await api.get(urlBase)
     expect(response.body).toHaveLength(2)
   })
 
-  test('the first blog is about HTTP methods', async () => {
+  //4.9*: blogilistan testit, step2
+  test('blog identifier is "id" not "_id" for all', async () => {
     const response = await api.get(urlBase)
-    expect(response.body[0].title).toBe('HTML is easy')
-  })
-
-  test('all notes are returned', async () => {
-    const response = await api.get(urlBase)
-    expect(response.body).toHaveLength(helper.initialBlogs.length)
-  })
-
-  test('a specific note is within the returned notes', async () => {
-    const response = await api.get(urlBase)
-    const titles = response.body.map(b => b.title)
-
-    expect(titles).toContain('Muay thai')
+    response.body.forEach(e => {
+      expect(e.id).toBeDefined()
+    })
   })
 
   //4.10: blogilistan testit, step3
@@ -68,41 +60,6 @@ describe('/api/blogs tests', () => {
     expect(titles).toContain('newBlog')
   })
 
-  //4.12*: blogilistan testit, step5
-  test('blog without title and url is not added', async () => {
-    const newBlog = { author: 'noTitle' }
-
-    await api
-      .post(urlBase)
-      .send(newBlog)
-      .expect(400)
-
-    const blogsAtEnd = await helper.blogsInDb()
-
-    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
-  })
-
-  test('a specific blog can be viewed', async () => {
-    const blogsAtStart = await helper.blogsInDb()
-    const blogToView = blogsAtStart[0]
-
-    const resultBlog = await api
-      .get(`${urlBase}/${blogToView.id}`)
-      .expect(200)
-      .expect('Content-Type', /application\/json/)
-
-    const processedBlogToView = JSON.parse(JSON.stringify(blogToView))
-    expect(resultBlog.body).toEqual(processedBlogToView)
-  })
-
-  //4.9*: blogilistan testit, step2
-  test('blog identifier is "id" not "_id" for all', async () => {
-    const response = await api.get(urlBase)
-    response.body.forEach(e => {
-      expect(e.id).toBeDefined()
-    })
-  })
-
   //4.11*: blogilistan testit, step4
   test('if likes are undefined initialize it to 0', async () => {
     const newBlog = {
@@ -120,6 +77,50 @@ describe('/api/blogs tests', () => {
     const blogsAtEnd = await helper.blogsInDb()
     console.log('VIKA BLOGI BOE', blogsAtEnd[2])
     expect(blogsAtEnd[2].likes).toBe(0)
+  })
+
+  //4.12*: blogilistan testit, step5
+  test('blog without title and url is not added', async () => {
+    const newBlog = { author: 'noTitle' }
+
+    await api
+      .post(urlBase)
+      .send(newBlog)
+      .expect(400)
+
+    const blogsAtEnd = await helper.blogsInDb()
+
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+  })
+
+  test('the first blog is about HTTP methods', async () => {
+    const response = await api.get(urlBase)
+    expect(response.body[0].title).toBe('HTML is easy')
+  })
+
+  test('all notes are returned', async () => {
+    const response = await api.get(urlBase)
+    expect(response.body).toHaveLength(helper.initialBlogs.length)
+  })
+
+  test('a specific note is within the returned notes', async () => {
+    const response = await api.get(urlBase)
+    const titles = response.body.map(b => b.title)
+
+    expect(titles).toContain('Muay thai')
+  })
+
+  test('a specific blog can be viewed', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToView = blogsAtStart[0]
+
+    const resultBlog = await api
+      .get(`${urlBase}/${blogToView.id}`)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    const processedBlogToView = JSON.parse(JSON.stringify(blogToView))
+    expect(resultBlog.body).toEqual(processedBlogToView)
   })
 })
 
