@@ -8,20 +8,15 @@ const Blog = require('../models/blog')
 const helper = require('./test_helper')
 
 
-beforeEach(async () => {
-  await Blog.deleteMany({})
-  let blogObject = new Blog(helper.initialBlogs[0])
-  await blogObject.save()
-  blogObject = new Blog(helper.initialBlogs[1])
-  await blogObject.save()
-})
+
 
 describe('/api/blogs tests', () => {
-  test('notes are returned as json', async () => {
-    await api
-      .get(urlBase)
-      .expect(200)
-      .expect('Content-Type', /application\/json/)
+  beforeEach(async () => {
+    await Blog.deleteMany({})
+    let blogObject = new Blog(helper.initialBlogs[0])
+    await blogObject.save()
+    blogObject = new Blog(helper.initialBlogs[1])
+    await blogObject.save()
   })
 
   //4.8: blogilistan testit, step 1
@@ -88,40 +83,83 @@ describe('/api/blogs tests', () => {
       .send(newBlog)
       .expect(400)
 
+
     const blogsAtEnd = await helper.blogsInDb()
 
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
   })
 
-  test('the first blog is about HTTP methods', async () => {
-    const response = await api.get(urlBase)
-    expect(response.body[0].title).toBe('HTML is easy')
-  })
-
-  test('all notes are returned', async () => {
-    const response = await api.get(urlBase)
-    expect(response.body).toHaveLength(helper.initialBlogs.length)
-  })
-
-  test('a specific note is within the returned notes', async () => {
-    const response = await api.get(urlBase)
-    const titles = response.body.map(b => b.title)
-
-    expect(titles).toContain('Muay thai')
-  })
-
-  test('a specific blog can be viewed', async () => {
+  //4.13 blogilistan laajennus, step1
+  test('successfully deleting a blog', async () => {
     const blogsAtStart = await helper.blogsInDb()
-    const blogToView = blogsAtStart[0]
+    const blogToDelete = blogsAtStart[0]
 
-    const resultBlog = await api
-      .get(`${urlBase}/${blogToView.id}`)
-      .expect(200)
-      .expect('Content-Type', /application\/json/)
+    await api
+      .delete(`${urlBase}/${blogToDelete.id}`)
+      .expect(204)
 
-    const processedBlogToView = JSON.parse(JSON.stringify(blogToView))
-    expect(resultBlog.body).toEqual(processedBlogToView)
+    const blogsAtEnd = await helper.blogsInDb()
+
+    expect(blogsAtEnd.length).toBe(helper.initialBlogs.length -1)
+
+    const titles = blogsAtEnd.map(r => r.title)
+    expect(titles).not.toContain(blogToDelete.title)
   })
+
+  //4.14* blogilistan laajennus, step2
+  test('update blog.likes', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const likesAtStart = blogsAtStart[0].likes
+    const blogToUpdate = blogsAtStart[0]
+    blogToUpdate.likes += 1
+
+    await api
+      .put(`${urlBase}/${blogsAtStart[0].id}`)
+      .send(blogToUpdate)
+      .expect(200)
+
+    expect(likesAtStart +1).toBe(blogToUpdate.likes)
+  })
+
+  describe('Extra tests', async () => {
+    test('notes are returned as json', async () => {
+      await api
+        .get(urlBase)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+    })
+
+    test('the first blog is about HTTP methods', async () => {
+      const response = await api.get(urlBase)
+      expect(response.body[0].title).toBe('HTML is easy')
+    })
+
+    test('all notes are returned', async () => {
+      const response = await api.get(urlBase)
+      expect(response.body).toHaveLength(helper.initialBlogs.length)
+    })
+
+    test('a specific note is within the returned notes', async () => {
+      const response = await api.get(urlBase)
+      const titles = response.body.map(b => b.title)
+
+      expect(titles).toContain('Muay thai')
+    })
+
+    test('a specific blog can be viewed', async () => {
+      const blogsAtStart = await helper.blogsInDb()
+      const blogToView = blogsAtStart[0]
+
+      const resultBlog = await api
+        .get(`${urlBase}/${blogToView.id}`)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+
+      const processedBlogToView = JSON.parse(JSON.stringify(blogToView))
+      expect(resultBlog.body).toEqual(processedBlogToView)
+    })
+  })
+
 })
 
 
