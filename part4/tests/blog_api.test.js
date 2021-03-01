@@ -121,7 +121,7 @@ describe('/api/blogs tests', () => {
     expect(likesAtStart +1).toBe(blogToUpdate.likes)
   })
 
-  describe('Extra tests', async () => {
+  describe('Extra tests', () => {
     test('notes are returned as json', async () => {
       await api
         .get(urlBase)
