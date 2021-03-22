@@ -1,29 +1,14 @@
 import React, { useState } from 'react'
-import blogService from '../services/blogs'
 
-const CreateBlog = ({ updateBlogs, createNotification }) => {
+const CreateBlog = ({ updateBlogs, createNotification, handleBlogSubmit }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
-
-  const handleBlogSubmit = async (event) => {
-    event.preventDefault()
-    try {
-      await blogService.create({
-        title: title,
-        author: author,
-        url: url
-      })
-      setTitle('')
-      setAuthor('')
-      setUrl('')
-      updateBlogs()
-      createNotification('green', `A new blog ${title} by ${author}`)
-    } catch (e) {
-      console.log(e)
-      createNotification('red', 'Could not create new blog')
-    }
+  const clearStates = () => {
+    setTitle('')
+    setAuthor('')
+    setUrl('')
   }
 
 
@@ -32,7 +17,15 @@ const CreateBlog = ({ updateBlogs, createNotification }) => {
       <h3>Create new blog</h3>
 
       <div className="createBlogContainer">
-        <form onSubmit={handleBlogSubmit}>
+        <form onSubmit={(e) => {
+          e.preventDefault()
+          handleBlogSubmit({
+            title: title,
+            author: author,
+            url: url
+          })
+          clearStates()
+        }}>
 
           <div className='inputTitle'>
             title:

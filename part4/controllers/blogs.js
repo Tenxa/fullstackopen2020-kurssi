@@ -24,7 +24,7 @@ blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
   const body = request.body
   const user = request.user
 
-  if (body.title === undefined || body.url === undefined) {
+  if (body.title === undefined || body.url === undefined || body.title === '' || body.url === '') {
     response.status(400).end()
   } else {
     const blog = new Blog({

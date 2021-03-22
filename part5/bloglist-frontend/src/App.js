@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import Login from './components/Login'
 import CreateBlog from './components/CreateBlog'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [notiMessage, setNotiMessage] = useState(null)
   const [notiColor, setNotiColor] = useState(null)
+  const blogFormRef = useRef()
 
   const getBlogs = () => {
     blogService.getAll().then(blogs =>
@@ -47,15 +47,29 @@ const App = () => {
     }, 5000)
   }
 
+  const addBlog = async (blogObject) => {
+    blogFormRef.current.toggleVisibility()
+    blogService
+      .create(blogObject)
+      .then(returnedObject => {
+        setBlogs(blogs.concat(returnedObject))
+        createNotification('green', `A new blog ${returnedObject.title} by ${returnedObject.author}`)
+      }).catch(e => {
+        console.log(e)
+        createNotification('red', 'Could not create new blog')
+      })
+  }
+
   return (
     <div>
       {user === null ?
         <div className='loginViewContainer'>
           <h1>Log in to application</h1>
           <Notification message={notiMessage} color={notiColor} />
-          <Login username={username} setUsername={setUsername}
-            password={password} setPassword={setPassword}
-            user={user} setUser={setUser} createNotification={createNotification}/>
+          <Login
+            user={user}
+            setUser={setUser}
+            createNotification={createNotification} />
         </div>
         :
 
@@ -65,7 +79,11 @@ const App = () => {
           <div>{user.name} is logged in <button onClick={handleLogout}>logout</button></div>
           <br />
 
-          <CreateBlog updateBlogs={getBlogs} setNotiMessage={setNotiMessage} setNotiColor={setNotiColor} createNotification={createNotification} />
+          <Togglable buttonLabel='New blog' ref={blogFormRef}>
+            <CreateBlog handleBlogSubmit={addBlog} setNotiMessage={setNotiMessage}
+              setNotiColor={setNotiColor} createNotification={createNotification}
+            />
+          </Togglable>
 
           <br />
           {blogs.map(blog =>

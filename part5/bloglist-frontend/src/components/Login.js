@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import loginService from '../services/login'
+import blogService from '../services/blogs'
 
-const Login = ({ username, password, setUsername, setPassword, setUser, createNotification }) => {
+const Login = ({ setUser, createNotification }) => {
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -12,6 +15,7 @@ const Login = ({ username, password, setUsername, setPassword, setUser, createNo
       window.localStorage.setItem(
         'loggedUser', JSON.stringify(user)
       )
+      blogService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
