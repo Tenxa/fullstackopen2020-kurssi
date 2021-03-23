@@ -15,7 +15,13 @@ const App = () => {
 
   const getBlogs = () => {
     blogService.getAll().then(blogs =>
-      setBlogs(blogs)
+      setBlogs(blogs.sort((a, b) => {
+        let keyA = a.likes
+        let keyB = b.likes
+        if (keyA < keyB) return 1
+        if (keyA > keyB) return -1
+        return 0
+      }))
     )
   }
 
@@ -60,6 +66,18 @@ const App = () => {
       })
   }
 
+  // refaktorointi: korvaa clientissä blogi päivityksen palauttamalla blogilla.
+  // Nyt haetaan kaikki blogit uudestaan.
+  const updateBlog = async (id, blogObject) => {
+    await blogService.update(id, blogObject)
+    getBlogs()
+  }
+
+  const deleteBlog = async (id) => {
+    await blogService.deleteById(id)
+    getBlogs()
+  }
+
   return (
     <div>
       {user === null ?
@@ -87,7 +105,7 @@ const App = () => {
 
           <br />
           {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} />
+            <Blog key={blog.id} blog={blog} updateBlog={updateBlog} deleteBlog={deleteBlog} user={user} />
           )}
         </div>
       }
