@@ -33,5 +33,4 @@ const deleteById = async (id) => {
   return response.data
 }
 
-// eslint-disable-next-line import/no-anonymous-default-export
 export default { getAll, setToken, create, update, deleteById }

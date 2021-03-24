@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const CreateBlog = ({ updateBlogs, createNotification, handleBlogSubmit }) => {
+const CreateBlog = ({ handleBlogSubmit }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -27,32 +27,35 @@ const CreateBlog = ({ updateBlogs, createNotification, handleBlogSubmit }) => {
           clearStates()
         }}>
 
-          <div className='inputTitle'>
-            title:
+          <div className='inputTitleDiv'>
+            <label htmlFor='title'>title:</label>
             <input
               type="text"
               value={title}
+              id="title"
               name="title"
               onChange={({ target }) => setTitle(target.value)}
             />
           </div>
 
-          <div className='inputAuthor'>
-            author:
+          <div className='inputAuthorDiv'>
+            <label htmlFor='author'>author:</label>
             <input
               type="text"
               value={author}
-              name="title"
+              id="author"
+              name="author"
               onChange={({ target }) => setAuthor(target.value)}
             />
           </div>
 
-          <div className='inputAuthor'>
-            url:
+          <div className='inputAuthorDiv'>
+            <label htmlFor='url'>url:</label>
             <input
               type="text"
               value={url}
-              name="title"
+              id="url"
+              name="url"
               onChange={({ target }) => setUrl(target.value)}
             />
           </div>
