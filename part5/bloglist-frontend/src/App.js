@@ -58,7 +58,7 @@ const App = () => {
     blogService
       .create(blogObject)
       .then(returnedObject => {
-        setBlogs(blogs.concat(returnedObject))
+        getBlogs()
         createNotification('green', `A new blog ${returnedObject.title} by ${returnedObject.author}`)
       }).catch(e => {
         console.log(e)
@@ -66,8 +66,6 @@ const App = () => {
       })
   }
 
-  // refaktorointi: korvaa clientissä blogi päivityksen palauttamalla blogilla.
-  // Nyt haetaan kaikki blogit uudestaan.
   const updateBlog = async (id, blogObject) => {
     await blogService.update(id, blogObject)
     getBlogs()
@@ -94,7 +92,7 @@ const App = () => {
         <div>
           <h2>blogs</h2>
           <Notification message={notiMessage} color={notiColor} />
-          <div>{user.name} is logged in <button onClick={handleLogout}>logout</button></div>
+          <div>{user.name} is logged in <button id='logOut' onClick={handleLogout}>logout</button></div>
           <br />
 
           <Togglable buttonLabel='New blog' ref={blogFormRef}>
