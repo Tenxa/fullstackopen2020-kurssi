@@ -1,4 +1,4 @@
-const anecdotesAtStart = [
+/*const anecdotesAtStart = [
   'If it hurts, do it more often',
   'Adding manpower to a late software project makes it later!',
   'The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
@@ -6,8 +6,6 @@ const anecdotesAtStart = [
   'Premature optimization is the root of all evil.',
   'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
 ]
-
-const getId = () => (100000 * Math.random()).toFixed(0)
 
 const asObject = (anecdote) => {
   return {
@@ -17,9 +15,11 @@ const asObject = (anecdote) => {
   }
 }
 
-const initialState = anecdotesAtStart.map(asObject)
+const initialState = anecdotesAtStart.map(asObject)*/
 
-const anecdoteReducer = (state = initialState, action) => {
+const getId = () => (100000 * Math.random()).toFixed(0)
+
+const anecdoteReducer = (state = [], action) => {
   switch(action.type) {
     case 'VOTE':
       const id = action.data.id
@@ -33,6 +33,8 @@ const anecdoteReducer = (state = initialState, action) => {
       )
       case 'NEW_ANECDOTE':
         return [...state, action.data]
+      case 'INIT_ANECDOTES':
+        return action.data
       default:
         return state
   }
@@ -45,14 +47,17 @@ export const vote = (id) => {
   }
 }
 
-export const addAnecdote = (content) => {
+export const addAnecdote = (anecdote) => {
   return {
     type: 'NEW_ANECDOTE',
-    data: {
-      content,
-      id: getId(),
-      votes: 0
-    }
+    data: anecdote
+  }
+}
+
+export const initializeAnecdotes = (anecdotes) => {
+  return {
+    type: 'INIT_ANECDOTES',
+    data: anecdotes,
   }
 }
 
