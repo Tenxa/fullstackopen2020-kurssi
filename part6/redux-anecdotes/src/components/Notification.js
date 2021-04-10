@@ -2,26 +2,26 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 
-const Notification = ({ show, setShow }) => {
-
+const Notification = () => {
   const notification = useSelector(state => state.notification)
   const style = {
     border: 'solid',
     padding: 10,
     borderWidth: 1
   }
-
-  const ShowNotification = () => {
-    return (
-      <div style={style}>
-        {notification}
-      </div>
-    )
+  const styleHide = {
+    display: 'none'
   }
 
   return (
-    show === false ? null :
-      <ShowNotification />
+    notification === ''
+      ? <div style={styleHide}>
+        {notification}
+      </div>
+
+      : <div style={style}>
+        {notification}
+      </div>
   )
 }
 
