@@ -4,7 +4,7 @@ import { SET_BIRTHYEAR, ALL_AUTHORS } from '../queries'
 import Select from 'react-select'
 
 const BirthyearForm = ({ authors }) => {
-  const [name, setName] = useState('')
+  //const [name, setName] = useState('')
   const [born, setBorn] = useState('')
   const [selectedOption, setSelectedOption] = useState(null)
 
@@ -17,16 +17,17 @@ const BirthyearForm = ({ authors }) => {
 
   useEffect(() => {
     if (result.data && result.data.editAuthor === null) {
-      console.log('Erroria')
+      console.log(`result.data: ${result.data}`)
+      console.log(`result.data.editAuthor ${result.data.editAuthor}`)
     }
   }, [result.data])
 
   const submit = (event) => {
     event.preventDefault()
 
-    setBirthyear({ variables: { name, setBornTo: born * 1 } })
+    setBirthyear({ variables: { name: selectedOption.value, setBornTo: born * 1 } })
 
-    setName('')
+    setSelectedOption(null)
     setBorn('')
   }
 

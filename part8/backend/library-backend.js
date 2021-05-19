@@ -88,16 +88,11 @@ const resolvers = {
         return books.filter(book => book.author === args.author)
       }
       if (args.genre) {
-        return Book.find({ genres: args.genre })
+        return Book.find({ genres: args.genre }).populate('author')
       }
 
       try {
-        const books = await Book.find({}).populate('author', {
-          name: 1,
-          born: 1,
-          id: 1,
-          bookCount: 1
-        })
+        const books = await Book.find({}).populate('author')
         return books
 
       } catch (error) {
