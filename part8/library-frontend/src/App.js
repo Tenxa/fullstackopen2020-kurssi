@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient, useSubscription } from '@apollo/client'
 import Authors from './components/Authors'
 import Books from './components/Books'
 import Login from './components/Login'
 import NewBook from './components/NewBook'
 import Recommendations from './components/Recommendations'
-//import { GET_CURRENT_USER, BOOKS_BY_GENRE } from './queries'
+import { BOOK_ADDED, BOOKS_BY_GENRE } from './queries'
+//import { GET_CURRENT_USER,  } from './queries'
 
 const Notify = ({ errorMessage }) => {
   if (!errorMessage) {
@@ -44,6 +45,49 @@ const App = () => {
     client.resetStore()
   }
 
+  const updateCacheWith = (addedBook) => {
+    //Katsotaan titlejä, koska ne ovat unique.
+    const includedIn = (set, object) => set.map(p => p.title).includes(object.title)
+
+    // Ensin luetaan ja kirjoitetaan cacheen, jossa kaikki kirjat ovat.
+    const dataInStore = client.readQuery({
+      query: BOOKS_BY_GENRE,
+      variables: { genre: '' }
+    })
+
+    if (!includedIn(dataInStore.allBooks, addedBook)) {
+      client.writeQuery({
+        query: BOOKS_BY_GENRE,
+        variables: { genre: '' },
+        data: { allBooks: dataInStore.allBooks.concat(addedBook) }
+      })
+
+      // katsotaan, jos on genrejä määritelty niin lisätään, jokaisen genre kohtaisen kyselyn cacheen.
+      if (addedBook.genres) {
+        addedBook.genres.forEach(genre => {
+          const dataInStoreByGenre = client.readQuery({
+            query: BOOKS_BY_GENRE,
+            variables: { genre: genre }
+          })
+          if (dataInStoreByGenre) {
+            client.writeQuery({
+              query: BOOKS_BY_GENRE,
+              variables: { genre: genre },
+              data: { allBooks: dataInStoreByGenre.allBooks.concat(addedBook) }
+            })
+          }
+        })
+      }
+    }
+  }
+
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      const addedBook = subscriptionData.data.bookAdded
+      window.alert(addedBook.title)
+      updateCacheWith(addedBook)
+    }
+  })
 
   if (token === null) {
     return (
@@ -84,6 +128,8 @@ const App = () => {
         <button onClick={logout}>logout</button>
       </div>
 
+      <Notify errorMessage={errorMessage} />
+
       <Authors
         show={page === 'authors'}
       />
@@ -94,6 +140,7 @@ const App = () => {
 
       <NewBook
         show={page === 'add'}
+        setError={notify}
       />
 
       <Recommendations

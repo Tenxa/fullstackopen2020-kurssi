@@ -11,7 +11,8 @@ const NewBook = (props) => {
 
   const [createBook] = useMutation(CREATE_BOOK, {
     onError: (error) => {
-      console.log(error.graphQLErrors[0])
+      console.log(error.graphQLErrors[0].message)
+      props.setError(error.graphQLErrors[0].message)
     },
   })
 
