@@ -1,5 +1,5 @@
 
-type RatingDescription = 'Weak' | 'Almost' | 'Well done';
+type RatingDescription = "Weak" | "Almost" | "Well done";
 
 interface excersiceResults {
   periodLength: number;
@@ -47,13 +47,13 @@ const parseArguments = (args: Array<string>) => {
   args.splice(0, 2)
   args.forEach(e => {
     if (isNaN(Number(e))) {
-      throw new Error('Provided values were not numbers!');
+      throw new Error("Provided values were not numbers!");
     } else {
       arr.push(Number(e))
     }
   });
   
-  return calculateExercises(arr.shift(), arr)
+  return calculateExercises(Number(arr.shift()), arr)
 }
 
 if (process.argv.length > 2) {
