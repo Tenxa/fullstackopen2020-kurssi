@@ -27,12 +27,25 @@ export const calculateBmi = (cm: number, kg: number): string => {
       return `BMI: ${fixedRes}, Obese Class II (Severely obese)`;
     case (result >= 40):
       return `BMI: ${fixedRes}, Obese Class III (Very severely obese)`;
-    default: 
+    default:
       throw new Error("Invalid result for BMI");
-      
-  }
-}
 
+  }
+};
+
+
+export const parseAndCalculateBMI = (arg1: string, arg2: string) => {
+  if (!arg1 || !arg2) throw new Error("Weight, height or both missing");
+  const height = Number(arg1);
+  const weight = Number(arg2);
+
+  if (Number.isNaN(height) || Number.isNaN(weight)) throw new Error("Give weight and height as numbers");
+
+  return calculateBmi(height, weight);
+};
+
+
+/* for excercise 9.3*/
 const parseCMDArguments = (args: Array<string>): bmiValues => {
   if (args.length < 4) throw new Error("Not enough arguments");
   if (args.length > 4) throw new Error("Too many arguments");
@@ -45,21 +58,13 @@ const parseCMDArguments = (args: Array<string>): bmiValues => {
   } else {
     throw new Error("Provided values were not numbers!");
   }
-}
+};
 
-export const parseAndCalculateBMI = (arg1: any, arg2: any) => {
-  if (!arg1 || !arg2) throw new Error("Weight, height or both missing");
-  const height = Number(arg1);
-  const weight = Number(arg2);
-  
-  if (Number.isNaN(height) || Number.isNaN(weight)) throw new Error("Give weight and height as numbers");
-  
-  return calculateBmi(height, weight);
-}
-
+/* for excercise 9.3*/
 try {
   const { height, weight } = parseCMDArguments(process.argv);
   console.log(calculateBmi(height, weight));
 } catch (e) {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   console.log("Error, something bad happened, message: ", e.message);
 }

@@ -28,7 +28,6 @@ const calculateExercises = (target: number, exercises: Array<number>): excersice
     rating = 1;
     ratingDescription = "Weak";
   }
-
   const success = average >= target;
 
   return {
@@ -39,23 +38,22 @@ const calculateExercises = (target: number, exercises: Array<number>): excersice
     ratingDescription,
     target,
     average: average,
-  }
-}
+  };
+};
 
-const parseArguments = (args: Array<string>) => {
-  let arr: number[] = [];
-  args.splice(0, 2)
-  args.forEach(e => {
-    if (isNaN(Number(e))) {
-      throw new Error("Provided values were not numbers!");
-    } else {
-      arr.push(Number(e))
-    }
-  });
+
+export const parseExcerciseArguments = (target: unknown, exercises: unknown[]) => {
+  if (!target || exercises.length === 0 || !exercises) throw new Error("parameters missing");
   
-  return calculateExercises(Number(arr.shift()), arr)
-}
+  const parsedTarget = Number(target);
+  const parsedExercises = exercises.map((e) => Number(e));
+
+  if (Number.isNaN(parsedTarget) || parsedExercises.some((e) => isNaN(e))) throw new Error("malformatted parameters");
+  
+  return calculateExercises(parsedTarget, parsedExercises);
+};
 
 if (process.argv.length > 2) {
-  console.log(parseArguments(process.argv))
+  const [, , target, ...exercises] = process.argv;
+  console.log(parseExcerciseArguments(target, exercises));
 }
