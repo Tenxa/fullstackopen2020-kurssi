@@ -8,12 +8,18 @@ const style = {
   margin: "10px"
 }
 
+const CourseHeader = ({ coursePart }: { coursePart: CoursePart }) => {
+  return (
+    <p><strong>{coursePart.name} {coursePart.exerciseCount}</strong></p>
+  );
+};
+
 const Part = ({ coursePart }: { coursePart: CoursePart }) => {
   switch (coursePart.type) {
     case "normal": {
       return (
         <div style={style}>
-          <p><strong>{coursePart.name} {coursePart.exerciseCount}</strong></p>
+          <CourseHeader coursePart={coursePart}/>
           <i>{coursePart.description}</i>
         </div>
       );
@@ -21,7 +27,7 @@ const Part = ({ coursePart }: { coursePart: CoursePart }) => {
     case "groupProject": {
       return (
         <div style={style}>
-          <p><strong>{coursePart.name} {coursePart.exerciseCount}</strong></p>
+          <CourseHeader coursePart={coursePart}/>
           <p>project exercises {coursePart.groupProjectCount}</p>
         </div>
       );
@@ -29,7 +35,7 @@ const Part = ({ coursePart }: { coursePart: CoursePart }) => {
     case "submission": {
       return (
         <div style={style}>
-          <p><strong>{coursePart.name} {coursePart.exerciseCount}</strong></p>
+          <CourseHeader coursePart={coursePart}/>
           <i>{coursePart.description}</i>
           <p>submit to: <a>{coursePart.exerciseSubmissionLink}</a></p>
         </div>
@@ -38,7 +44,7 @@ const Part = ({ coursePart }: { coursePart: CoursePart }) => {
     case "special": {
       return (
         <div style={style}>
-          <p><strong>{coursePart.name} {coursePart.exerciseCount}</strong></p>
+          <CourseHeader coursePart={coursePart}/>
           <i>{coursePart.description}</i>
           <p>required skills: {" "}
             {coursePart.requirements.map((r) => <Fragment key={r}>{" "} {r}</Fragment>)}
