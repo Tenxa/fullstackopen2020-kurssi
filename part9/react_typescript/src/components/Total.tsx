@@ -1,11 +1,7 @@
 import React from 'react';
+import { CoursePart } from '../types';
 
-interface ContentProps {
-  name: string;
-  exerciseCount: number;
-}
-
-const Total = ({ courseParts }: { courseParts: ContentProps[] }) => {
+const Total = ({ courseParts }: { courseParts: CoursePart[] }) => {
   return (
     <p>
       Number of exercises{" "}
