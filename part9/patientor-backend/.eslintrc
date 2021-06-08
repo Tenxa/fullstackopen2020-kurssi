@@ -25,8 +25,8 @@
   },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": "./tsconfig.json"
-    // setted tsconfigRootDir for ESLint manager. Otherwise won't find tsconfig.json.
-    //"tsconfigRootDir": "./part9/patientor-backend"
+    "project": "./tsconfig.json",
+    // setted tsconfigRootDir for ESLint plugin for VSCode. Otherwise won't find tsconfig.json.
+    "tsconfigRootDir": "./part9/patientor-backend"
   }
 }
