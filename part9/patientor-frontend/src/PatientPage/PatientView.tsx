@@ -1,15 +1,15 @@
 import React, { useEffect } from "react";
 import axios from "axios";
+import GenderIcon from './GenderIcon';
 import { useParams } from "react-router-dom";
-import { Icon } from "semantic-ui-react";
 import { useStateValue, updatePatient } from "../state";
 import { Patient } from "../types";
 import { apiBaseUrl } from "../constants";
+import PatientEntries from './PatientEntries';
 
 const PatientView = () => {
   const { id } = useParams<{ id: string }>();
   const [{ patients }, dispatch] = useStateValue();
-  const patient = { ...patients[id] };
 
   const fetchPatient = async () => {
     try {
@@ -21,44 +21,27 @@ const PatientView = () => {
   };
 
   useEffect(() => {
-    if (!patient.ssn) {
+    if (!patients[id] || !patients[id].ssn) {
       void fetchPatient();
     }
   }, [dispatch]);
 
 
-  const GenderIcon = () => {
-    if (patient.gender === 'other') {
-      return (
-        <div>
-          <Icon name='genderless' size='big' />
-        </div>
-      );
-    }
-    if (patient.gender === 'male') {
-      return (
-        <div>
-          <Icon name='mars' size='big' />
-        </div>
-      );
-    }
-    return (
-      <div>
-        <Icon name='venus' size='big' />
-      </div>
-    );
-  };
+  if (!patients[id]) {
+    return null;
+  }
 
   return (
     <div>
       <div style={{ display: 'flex' }}>
-        <h3>{patient.name}</h3>
-        <GenderIcon />
+        <h3>{patients[id].name}</h3>
+        <GenderIcon gender={patients[id].gender} />
       </div>
       <div>
-        <p>ssn: {patient.ssn}</p>
-        <p>occupation: {patient.occupation}</p>
+        <p>ssn: {patients[id].ssn}</p>
+        <p>occupation: {patients[id].occupation}</p>
       </div>
+      <PatientEntries entries={patients[id].entries} />
     </div>
 
   );
