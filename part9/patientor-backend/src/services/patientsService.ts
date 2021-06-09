@@ -29,9 +29,7 @@ const addPatient = ( entry: NewPatientEntry ): PatientEntry => {
 };
 
 const getPatientById = (id: string): PatientEntry | undefined => {
-  const findPatient = patientsData.find(p => p.id === id);
-  findPatient ? findPatient.entries = [] : null;
-  return findPatient;
+  return patientsData.find(p => p.id === id);
 };
 
 export default {
