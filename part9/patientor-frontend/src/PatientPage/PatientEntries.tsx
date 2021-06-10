@@ -1,5 +1,13 @@
 import React from 'react';
+import { Item } from 'semantic-ui-react';
 import { Entry } from '../types';
+import SemanticItem from '../components/SemanticItem';
+
+const divList = {
+  borderBottom: "solid 2px slategrey",
+  borderTop: "solid 2px slategrey",
+  margin: "0px 10em 0px 0em"
+};
 
 interface IPatientEntiesProps {
   entries: Entry[];
@@ -13,21 +21,12 @@ const PatientEntries = ({ entries }: IPatientEntiesProps) => {
   return (
     <div>
       <h4>entries</h4>
-      <div>
-        {entries.map((entry) => (
-          <div key={entry.id}>
-            <div>
-              {entry.date} {entry.description}
-            </div>
-            <ul>
-              {entry.diagnosisCodes?.map((dCode, i) => (
-                <li key={i}>
-                  {dCode}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
+      <div style={divList}>
+        <Item.Group divided style={{padding: "1em 1em 1em 1em"}}>
+          {entries.map((entry) => (
+            <SemanticItem key={entry.id} entry={entry} />
+          ))}
+        </Item.Group>
       </div>
     </div>
   );
