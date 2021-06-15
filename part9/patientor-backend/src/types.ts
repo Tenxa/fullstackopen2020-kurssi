@@ -1,4 +1,4 @@
-export interface DiagnoseEntry {
+export interface Diagnosis {
   code: string;
   name: string;
   latin?: string;
@@ -10,8 +10,6 @@ export enum Gender {
   Other = 'other'
 }
 
-
-
 export enum HealthCheckRating {
   "Healthy" = 0,
   "LowRisk" = 1,
@@ -19,12 +17,23 @@ export enum HealthCheckRating {
   "CriticalRisk" = 3
 }
 
-interface BaseEntry {
+export interface Discharge {
+  date: string;
+  criteria: string;
+}
+
+export interface SickLeave {
+  startDate: string;
+  endDate: string;
+}
+
+export interface BaseEntry {
   id: string;
-  description: string;
   date: string;
   specialist: string;
-  diagnosisCodes?: Array<DiagnoseEntry['code']>;
+  type: string;
+  description: string;
+  diagnosisCodes?: Array<Diagnosis['code']>;
 }
 
 interface HealthCheckEntry extends BaseEntry {
@@ -35,18 +44,12 @@ interface HealthCheckEntry extends BaseEntry {
 interface OccupationalHealthcareEntry extends BaseEntry {
   type: "OccupationalHealthcare";
   employerName: string;
-  sickLeave?: {
-    startDate: string;
-    endDate: string;
-  }
+  sickLeave?: SickLeave;
 }
 
 interface HospitalEntry extends BaseEntry {
   type: "Hospital";
-  discharge: {
-    date: string;
-    criteria: string;
-  }
+  discharge: Discharge
 }
 
 
@@ -55,7 +58,7 @@ export type Entry =
   | OccupationalHealthcareEntry
   | HealthCheckEntry;
 
-export interface PatientEntry {
+export interface Patient {
   id: string;
   name: string;
   dateOfBirth: string;
@@ -65,6 +68,10 @@ export interface PatientEntry {
   entries: Entry[];
 }
 
-export type NonSensitivePatientEntry = Omit<PatientEntry, 'ssn'>;
-export type NewPatientEntry = Omit<PatientEntry, 'id' | 'entries'>;
-export type PublicPatient = Omit<PatientEntry, 'ssn' | 'entries'>;
+export type NonSensitivePatient= Omit<Patient, 'ssn'>;
+export type NewPatient = Omit<Patient, 'id' | 'entries'>;
+export type PublicPatient = Omit<Patient, 'ssn' | 'entries'>;
+//export type NewEntry = Omit<Entry, 'id'>;
+
+type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never;
+export type NewEntry = UnionOmit<Entry, 'id'>;

@@ -7,7 +7,7 @@ const SemanticItem: React.FC<{ entry: Entry }> = ({ entry }) => {
   return (
     <Item>
       <Item.Content>
-        <Item.Header as='a'>{entry.date}</Item.Header>
+        <Item.Header as='div'>{entry.date}</Item.Header>
         <Item.Description>{entry.description}</Item.Description>
       </Item.Content>
       <Item.Image><EntryIcon entry={entry}/></Item.Image>

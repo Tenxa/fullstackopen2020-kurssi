@@ -1,4 +1,4 @@
-import { DiagnoseEntry } from '../types';
+import { Diagnosis } from '../types';
 
 const data = [
   {
@@ -84,8 +84,8 @@ const data = [
   }
 ];
 
-const diagnoseEntries: DiagnoseEntry[] = data.map(obj => {
-  const object = obj as DiagnoseEntry;
+const diagnoseEntries: Diagnosis[] = data.map(obj => {
+  const object = obj as Diagnosis;
   return object;
 });
 

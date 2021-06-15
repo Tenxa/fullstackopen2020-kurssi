@@ -1,11 +1,11 @@
 import express from 'express';
 import patientsService from '../services/patientsService';
-import toNewPatientEntry from '../utils';
+import { toNewPatient, parseEntry } from '../utils';
 
 const router = express.Router();
 
 router.get('/', (_req, res) => {
-  res.send(patientsService.getNonSensitiveEntries());
+  res.send(patientsService.getNonSensitivePatients());
 });
 
 router.get('/:id', (req, res) => {
@@ -14,13 +14,19 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
   try {
-    const newPatientEntry = toNewPatientEntry(req.body);
+    const newPatientEntry = toNewPatient(req.body);
     const addedEntry = patientsService.addPatient(newPatientEntry);
     res.json(addedEntry);
 
   } catch (error) {
-   res.status(400).send(error.message); 
+    res.status(400).send(error.message);
   }
+});
+
+router.post('/:id/entries', (req, res) => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const entryBody = parseEntry(req.body);
+  res.send(patientsService.addEntryToPatient(req.params.id, entryBody));
 });
 
 export default router;

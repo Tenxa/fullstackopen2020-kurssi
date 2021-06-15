@@ -1,15 +1,15 @@
 import patientsData from '../data/patients';
-import { PatientEntry, NewPatientEntry, PublicPatient } from '../types';
-import {v1 as uuid} from 'uuid';
+import { Patient, NewPatient, PublicPatient, Entry, NewEntry } from '../types';
+import { v1 as uuid } from 'uuid';
 
-const patients: Array<PatientEntry> = patientsData;
+const patients: Array<Patient> = patientsData;
 
-const getEntries = (): Array<PatientEntry> => {
+const getPatients = (): Array<Patient> => {
   return patients;
 };
 
-const getNonSensitiveEntries = (): PublicPatient[] => {
-  return patients.map(({ id, name, dateOfBirth, gender, occupation}) => ({
+const getNonSensitivePatients = (): PublicPatient[] => {
+  return patients.map(({ id, name, dateOfBirth, gender, occupation }) => ({
     id,
     name,
     dateOfBirth,
@@ -18,23 +18,63 @@ const getNonSensitiveEntries = (): PublicPatient[] => {
   }));
 };
 
-const addPatient = ( entry: NewPatientEntry ): PatientEntry => {
+const getPatientById = (id: string): Patient | undefined => {
+  return patientsData.find((p: Patient) => p.id === id);
+};
+
+const addPatient = (patient: NewPatient): Patient => {
   const newPatientEntry = {
     id: uuid(),
-    ...entry,
+    ...patient,
     entries: []
   };
   patients.push(newPatientEntry);
   return newPatientEntry;
 };
 
-const getPatientById = (id: string): PatientEntry | undefined => {
-  return patientsData.find(p => p.id === id);
+const addEntryToPatient = (id: string, entry: NewEntry): Patient => {
+  if (!entry.type) throw new Error("Entry type is not defined");
+
+  const patient = getPatientById(id);
+  if (!patient) throw new Error("No patient found with this id");
+
+  /*const entryBase = {
+    id: entry.id,
+    description: entry.id,
+    date: entry.date,
+    specialist: entry.specialist,
+    diagnosisCodes: entry.diagnosisCodes
+  };
+
+  switch (entry.type) {
+    case 'HealthCheck': {
+      entry = {}
+      return {
+        ...patient,
+        entries: patient.entries.concat(entry)
+      };
+    }
+  }*/
+  const newEntry: Entry = {
+    id: uuid(),
+    ...entry
+  };
+
+  const newPatientEntry = {
+    ...patient,
+    entries: patient.entries.concat(newEntry)
+  };
+  const patientIndex = patients.findIndex(patient => patient.id === id);
+  patients[patientIndex] = newPatientEntry;
+
+  return newPatientEntry;
+
 };
 
 export default {
-  getEntries,
-  getNonSensitiveEntries,
+  getPatients,
+  getNonSensitivePatients,
   addPatient,
-  getPatientById
+  getPatientById,
+  addEntryToPatient
 };
