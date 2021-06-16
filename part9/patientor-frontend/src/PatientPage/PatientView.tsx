@@ -3,18 +3,39 @@ import axios from "axios";
 import GenderIcon from './GenderIcon';
 import { useParams } from "react-router-dom";
 import { useStateValue, updatePatient } from "../state";
-import { Patient } from "../types";
+import { NewEntry, Patient } from "../types";
 import { apiBaseUrl } from "../constants";
 import PatientEntries from './PatientEntries';
+import { Button, Divider } from "semantic-ui-react";
+import AddEntryModal from '../AddEntryModal';
 
 const PatientView = () => {
   const { id } = useParams<{ id: string }>();
   const [{ patients }, dispatch] = useStateValue();
+  const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+  //const [error, setError] = React.useState<string | undefined>();
+
+  const openModal = (): void => setModalOpen(true);
+
+  const closeModal = (): void => {
+    setModalOpen(false);
+    //setError(undefined);
+  };
 
   const fetchPatient = async () => {
     try {
       const { data } = await axios.get<Patient>(`${apiBaseUrl}/patients/${id}`);
       dispatch(updatePatient(data));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const submitNewEntry = async (values: NewEntry) => {
+    try {
+      const { data } = await axios.post<Patient>(`${apiBaseUrl}/patients/${id}/entries`, values);
+      dispatch(updatePatient(data));
+      closeModal();
     } catch (error) {
       console.log(error);
     }
@@ -42,8 +63,15 @@ const PatientView = () => {
         <p>occupation: {patients[id].occupation}</p>
       </div>
       <PatientEntries entries={patients[id].entries} />
-    </div>
 
+      <Divider hidden />
+      <AddEntryModal
+        modalOpen={modalOpen}
+        onClose={closeModal}
+        onSubmit={submitNewEntry}
+      />
+      <Button onClick={() => openModal()}>Add New Entry For Patient</Button>
+    </div>
   );
 };
 

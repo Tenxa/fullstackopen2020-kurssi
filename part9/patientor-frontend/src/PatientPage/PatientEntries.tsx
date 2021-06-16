@@ -9,11 +9,11 @@ const divList = {
   margin: "0px 10em 0px 0em"
 };
 
-interface IPatientEntiesProps {
+interface IPatientEntriesProps {
   entries: Entry[];
 }
 
-const PatientEntries = ({ entries }: IPatientEntiesProps) => {
+const PatientEntries = ({ entries }: IPatientEntriesProps) => {
   if (!entries || entries === undefined) {
     return null;
   }

@@ -38,23 +38,6 @@ const addEntryToPatient = (id: string, entry: NewEntry): Patient => {
   const patient = getPatientById(id);
   if (!patient) throw new Error("No patient found with this id");
 
-  /*const entryBase = {
-    id: entry.id,
-    description: entry.id,
-    date: entry.date,
-    specialist: entry.specialist,
-    diagnosisCodes: entry.diagnosisCodes
-  };
-
-  switch (entry.type) {
-    case 'HealthCheck': {
-      entry = {}
-      return {
-        ...patient,
-        entries: patient.entries.concat(entry)
-      };
-    }
-  }*/
   const newEntry: Entry = {
     id: uuid(),
     ...entry

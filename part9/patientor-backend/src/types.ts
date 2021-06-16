@@ -71,7 +71,6 @@ export interface Patient {
 export type NonSensitivePatient= Omit<Patient, 'ssn'>;
 export type NewPatient = Omit<Patient, 'id' | 'entries'>;
 export type PublicPatient = Omit<Patient, 'ssn' | 'entries'>;
-//export type NewEntry = Omit<Entry, 'id'>;
 
 type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never;
 export type NewEntry = UnionOmit<Entry, 'id'>;
