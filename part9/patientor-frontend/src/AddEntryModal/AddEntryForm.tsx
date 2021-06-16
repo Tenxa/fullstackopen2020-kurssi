@@ -35,6 +35,12 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
       validate={values => {
         const requiredError = "Field is required";
         const errors: { [field: string]: string } = {};
+        if (values.date) {
+          const regex = /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/;
+          if (regex.test(values.date) === false) {
+            errors.date = "Date must be in YYYY-MM-DD format";
+          }
+        }
         if (!values.date) {
           errors.date = requiredError;
         }
