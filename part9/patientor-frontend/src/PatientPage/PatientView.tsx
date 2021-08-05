@@ -34,7 +34,8 @@ const PatientView = () => {
   const submitNewEntry = async (values: NewEntry) => {
     try {
       const { data } = await axios.post<Patient>(`${apiBaseUrl}/patients/${id}/entries`, values);
-      dispatch(updatePatient(data));
+      //dispatch(updatePatient(data));
+      console.log(data);
       closeModal();
     } catch (error) {
       console.log(error);

@@ -1,24 +1,19 @@
 import React from 'react';
-import { DiagnosisSelection, NumberField, TextField } from '../AddPatientModal/FormField';
+import { DiagnosisSelection, TextField } from '../AddPatientModal/FormField';
 import { Field, Form, Formik } from 'formik';
-import { FieldOptions, HealthCheckRating, NewEntry } from '../types';
+import { OccupationalHealthcareEntry } from '../types';
 import { useStateValue } from '../state';
 import { Button, Grid, GridColumn } from 'semantic-ui-react';
+import { dateRegex } from '../constants';
 
+type OccupationalHealthcareFormValues = Omit<OccupationalHealthcareEntry, 'id'>;
 
 interface Props {
-  onSubmit: (values: NewEntry) => void;
+  onSubmit: (values: OccupationalHealthcareFormValues) => void;
   onCancel: () => void;
 }
 
-const healthCheckRatingOptions: FieldOptions[] = [
-  { value: HealthCheckRating.Healthy, label: "Healthy" },
-  { value: HealthCheckRating.LowRisk, label: "LowRisk" },
-  { value: HealthCheckRating.HighRisk, label: "HighRisk" },
-  { value: HealthCheckRating.CriticalRisk, label: "CriticalRisk" }
-];
-
-const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
+const AddOccupationalHealthCareForm = ({ onSubmit, onCancel }: Props) => {
   const [{ diagnoses }] = useStateValue();
 
   return (
@@ -26,18 +21,18 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
       initialValues={{
         date: "",
         specialist: "",
-        type: "HealthCheck",
+        type: "OccupationalHealthcare",
         description: "",
         diagnosisCodes: undefined,
-        healthCheckRating: healthCheckRatingOptions[0].value
+        employerName: "",
+        sickLeave: undefined
       }}
       onSubmit={onSubmit}
-      validate={values => {
-        const requiredError = "Field is required";
+      validate={(values: OccupationalHealthcareFormValues) => {
         const errors: { [field: string]: string } = {};
+        const requiredError = "Field is required";
         if (values.date) {
-          const regex = /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/;
-          if (regex.test(values.date) === false) {
+          if (dateRegex.test(values.date) === false) {
             errors.date = "Date must be in YYYY-MM-DD format";
           }
         }
@@ -49,6 +44,12 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
         }
         if (!values.description) {
           errors.description = requiredError;
+        }
+        if (!values.employerName) {
+          errors.employerName = requiredError;
+        }
+        if (values.sickLeave?.endDate) {
+          errors.sickLeave = "jotain";
         }
         return errors;
       }}
@@ -76,12 +77,26 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
               component={TextField}
             />
             <Field
-              label="Health Check Rating"
-              name="healthCheckRating"
-              min={0}
-              max={3}
-              component={NumberField}
+              label="Employer Name"
+              placeholder="Employer Name"
+              name="employerName"
+              component={TextField}
             />
+
+            <Field
+              label="Sickleave Start Date"
+              placeholder="YYYY-MM-DD"
+              name="sickLeave.startDate"
+              component={TextField}
+            />
+
+            <Field
+              label="Sickleave End date"
+              placeholder="YYYY-MM-DD"
+              name="sickLeave.endDate"
+              component={TextField}
+            />
+
             <DiagnosisSelection
               setFieldValue={setFieldValue}
               setFieldTouched={setFieldTouched}
@@ -112,4 +127,4 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
   );
 };
 
-export default AddEntryForm;
+export default AddOccupationalHealthCareForm;
