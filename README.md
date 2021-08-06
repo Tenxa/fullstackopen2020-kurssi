@@ -12,6 +12,7 @@
 | Part 7 | 21/21 | React router, custom hooks, styling app with CSS and webpack |
 | Part 8 | 25/26 | GraphQL |
 | Part 9 | 27/27 | Typescript |
+| --- | 200/202 | -- |
 
 
 Heroku persons app: https://personsbackend.herokuapp.com/
